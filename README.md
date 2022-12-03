@@ -1,2 +1,3 @@
 # Ploygon_HA
-hackhathon
+Polygon hackhathon
+using chainlink VRFV2
