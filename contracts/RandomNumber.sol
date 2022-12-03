@@ -78,19 +78,22 @@ contract CoinFlip is VRFV2WrapperConsumerBase {
         
 
         statuses[requestId].fulfilled = true;
-        statuses[requestId].randomWord = randomWords[0];
+        statuses[requestId].randomWord = randomWords[0] % 100;  // random words generated should be between 1-100
 
+        //check if selected number is even or odd
         CoinFlipSelection result = CoinFlipSelection.ODD;
         if (randomWords[0] % 2 == 0) {
-            result = CoinFlipSelection.EVEN;
+            result = CoinFlipSelection.EVEN; 
         }
 
+        // on winning, pay x2 of staked amount
         if (statuses[requestId].choice == result) {
             statuses[requestId].youWin = true;
             payable(statuses[requestId].player).transfer(entryFees * 2);
         }
-        randomWords = randomWords;
+        
 
+        //show winning
         emit CoinFlipResult(requestId, statuses[requestId].youWin);
     }
 
