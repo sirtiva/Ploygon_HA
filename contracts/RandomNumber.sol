@@ -50,12 +50,14 @@ contract CoinFlip is VRFV2WrapperConsumerBase {
     function flip(CoinFlipSelection choice) external payable returns (uint256) {
         require(msg.value == entryFees, "Send entry fee before playing");    //function to make sure user sends token before playing
 
+        //function that requests random number from the chainlink contract
         uint256 requestId = requestRandomness(
             callbackGasLimit,
             requestConfirmations,
             numWords
         );
 
+        // reuest status of the random word sent
         statuses[requestId] = CoinFlipStatus({
             fees: VRF_V2_WRAPPER.calculateRequestPrice(callbackGasLimit),
             randomWord: 0,
@@ -69,6 +71,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase {
         return requestId;
     }
 
+    //random word sent from chainlink contract is stored temporarily
     function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords)
         internal
         override
